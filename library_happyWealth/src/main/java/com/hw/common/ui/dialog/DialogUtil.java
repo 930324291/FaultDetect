@@ -29,7 +29,7 @@ public class DialogUtil {
 	}
 
 	public static void showLoadingDialog(final Context context) {
-		showLoadingDialog(context,"加载中..");
+		showLoadingDialog(context,"请稍后..");
 	}
 
 	public static void dismissLoadingDialog() {

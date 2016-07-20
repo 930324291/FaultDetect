@@ -3,14 +3,14 @@ package info.faultdetect.com.faultdetect.activity;
 import android.view.View;
 import android.widget.EditText;
 
+import com.hw.common.faultdetect.api.UserServiceApi;
+import com.hw.common.faultdetect.model.BaseAjaxCallBack;
+import com.hw.common.faultdetect.model.UserInfo;
 import com.hw.common.ui.dialog.DialogUtil;
 import com.hw.common.utils.basicUtils.StringUtils;
-import com.hw.common.web.FastHttp;
 
 import info.faultdetect.com.faultdetect.MyApplication;
 import info.faultdetect.com.faultdetect.R;
-import info.faultdetect.com.faultdetect.bean.BaseAjaxCallBack;
-import info.faultdetect.com.faultdetect.bean.UserInfo;
 import info.faultdetect.com.faultdetect.utils.Constant;
 import info.faultdetect.com.faultdetect.utils.ToastUtil;
 
@@ -70,14 +70,25 @@ public class UpdateUserActivity extends BaseActivity{
         }
 
         DialogUtil.showLoadingDialog(this);
-        FastHttp.ajaxGetByBean(MyApplication.SERVER_URL + "register/modify.html", userInfo, new BaseAjaxCallBack() {
+        UserServiceApi.setUserInfo(userInfo, new BaseAjaxCallBack() {
             public void onSuccess(Res_BaseBean t) {
+                /*成功信息：
+                * Res_BaseBean JOSN数据自动转换成对象 支持如下转换类型，默认参数：result
+                * public String getData()  //获取JOSN数据
+                * public <T> List<T> getDataList(Class<T> cls) //获取对象列表
+                * public <T> List<T> getJsonList(Class<T> cls,String json) //获取对象列表
+                * public <T> List<T> getDataList(Class<T> cls, String param) //获取指定参数对象列表
+                * public <T> T getData(Class<T> cls, String param) //获取指定参数对象
+                * public <T> T getData(Class<T> cls) //获取默认参数对象
+                * */
+
                 MyApplication.getApplication().setUserInfo(userInfo);
                 ToastUtil.showShort("恭喜您，修改成功");
                 finish();
             }
 
             public void onFailure(int status, String msg) {
+                DialogUtil.dismissLoadingDialog();
                 ToastUtil.showShort(msg);
             }
         });

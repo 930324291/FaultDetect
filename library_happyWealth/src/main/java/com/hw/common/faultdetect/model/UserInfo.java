@@ -1,10 +1,10 @@
-package info.faultdetect.com.faultdetect.bean;
+package com.hw.common.faultdetect.model;
 
 /**
  * Created by nicai on 2016/7/20.
  * email：930324291@qq.com
  */
-public class UserInfo extends Req_BaseBean{
+public class UserInfo{
     private String userid;
     private String userName;
     private String nickName;
@@ -13,8 +13,16 @@ public class UserInfo extends Req_BaseBean{
     private String email;
     private String xb;
     private String organizationId;
-    private String state;
+    private String rsid;
     private Res_Company belongedOrganizations;
+
+    public String getRsid() {
+        return rsid;
+    }
+
+    public void setRsid(String rsid) {
+        this.rsid = rsid;
+    }
 
     public String getXb() {
         return xb;
@@ -78,14 +86,6 @@ public class UserInfo extends Req_BaseBean{
 
     public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public Res_Company getBelongedOrganizations() {

@@ -7,18 +7,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hw.common.faultdetect.api.UserServiceApi;
+import com.hw.common.faultdetect.model.BaseAjaxCallBack;
+import com.hw.common.faultdetect.model.Req_UpdatePwd;
 import com.hw.common.ui.dialog.DialogUtil;
 import com.hw.common.utils.basicUtils.CheckUtils;
 import com.hw.common.utils.basicUtils.StringUtils;
 import com.hw.common.utils.basicUtils.SystemUtils;
-import com.hw.common.web.FastHttp;
 
-import info.faultdetect.com.faultdetect.MyApplication;
 import info.faultdetect.com.faultdetect.R;
-import info.faultdetect.com.faultdetect.bean.BaseAjaxCallBack;
-import info.faultdetect.com.faultdetect.bean.Req_UpdatePwd;
-import info.faultdetect.com.faultdetect.bean.Res_UserInfo;
-import info.faultdetect.com.faultdetect.bean.UserInfo;
 import info.faultdetect.com.faultdetect.utils.TimeCount;
 import info.faultdetect.com.faultdetect.utils.ToastUtil;
 
@@ -69,13 +66,14 @@ public class ForgetPwdActivity extends BaseActivity {
         }
 
         DialogUtil.showLoadingDialog(this);
-        FastHttp.ajaxGetByBean(MyApplication.SERVER_URL + "register/modifyPassword.html", new Req_UpdatePwd(tel,pwd,code), new BaseAjaxCallBack() {
+        UserServiceApi.setPwd(new Req_UpdatePwd(tel, pwd, code), new BaseAjaxCallBack() {
+            @Override
             public void onSuccess(Res_BaseBean t) {
-                ToastUtil.showShort("恭喜您注册成功");
-                UserInfo userInfo = t.getData(Res_UserInfo.class).getUserAccountDescriptor();
+                ToastUtil.showShort("恭喜您修改成功");
                 finish();
             }
 
+            @Override
             public void onFailure(int status, String msg) {
                 ToastUtil.showShort(msg);
             }
@@ -92,7 +90,7 @@ public class ForgetPwdActivity extends BaseActivity {
 
         timeCount.start();
         DialogUtil.showLoadingDialog(this, "发送中..");
-        FastHttp.ajaxGetByBean(MyApplication.SERVER_URL + "register/sendCode.html?tel="+tel, null, new BaseAjaxCallBack() {
+        UserServiceApi.sendVerCode(tel,new BaseAjaxCallBack() {
             public void onSuccess(Res_BaseBean t) {
                 try {
                     SystemUtils.SmsContent content = new SystemUtils.SmsContent(ForgetPwdActivity.this, new Handler(), et_forget_pwd_verifyCode, "云短信", new SystemUtils.onSmsListener() {

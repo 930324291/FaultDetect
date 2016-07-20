@@ -12,14 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.hw.common.faultdetect.api.UserServiceApi;
+import com.hw.common.faultdetect.model.BaseAjaxCallBack;
+import com.hw.common.faultdetect.model.UserInfo;
 import com.hw.common.ui.dialog.DialogUtil;
 import com.hw.common.utils.basicUtils.SystemUtils;
-import com.hw.common.web.FastHttp;
 
 import info.faultdetect.com.faultdetect.MyApplication;
 import info.faultdetect.com.faultdetect.R;
-import info.faultdetect.com.faultdetect.bean.BaseAjaxCallBack;
-import info.faultdetect.com.faultdetect.bean.UserInfo;
 import info.faultdetect.com.faultdetect.utils.Constant;
 import info.faultdetect.com.faultdetect.utils.ToastUtil;
 
@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void getRegistHelp() {
-        FastHttp.ajaxGetByBean(MyApplication.SERVER_URL + "register/getRegisterHelpInfo.html?rdid=" + SystemUtils.getDeviceID(MyApplication.getApplication().getApplicationContext()), null, new BaseAjaxCallBack() {
+        UserServiceApi.getRegistHelpInfo(SystemUtils.getDeviceID(MyApplication.getApplication().getApplicationContext()), new BaseAjaxCallBack() {
             public void onSuccess(Res_BaseBean t) {
 
             }
@@ -71,6 +71,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
             }
         });
+
     }
 
     @Override
@@ -103,7 +104,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     // 修改用户信息
     private void setUserInfo(final UserInfo userInfo){
         DialogUtil.showLoadingDialog(this);
-        FastHttp.ajaxGetByBean(MyApplication.SERVER_URL + "register/modify.html", userInfo, new BaseAjaxCallBack() {
+        UserServiceApi.setUserInfo(userInfo, new BaseAjaxCallBack() {
             public void onSuccess(Res_BaseBean t) {
                 MyApplication.getApplication().setUserInfo(userInfo);
                 ToastUtil.showShort("恭喜您，修改成功");

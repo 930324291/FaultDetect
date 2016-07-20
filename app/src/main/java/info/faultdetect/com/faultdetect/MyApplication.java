@@ -6,15 +6,15 @@ import android.content.Context;
 import android.os.Environment;
 
 import com.hw.common.db.DbManage;
+import com.hw.common.faultdetect.model.UserInfo;
 import com.hw.common.utils.basicUtils.CommonUtil;
 import com.hw.common.utils.basicUtils.FileUtils;
 import com.hw.common.utils.basicUtils.SharedPreferenceUtil;
+import com.hw.common.utils.basicUtils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import info.faultdetect.com.faultdetect.bean.UserInfo;
 
 public class MyApplication extends Application {
     public static String FILE_TEMP,PIC_TEMP,CACHE_TEMP,OSS_TEMP;
@@ -70,7 +70,11 @@ public class MyApplication extends Application {
     }
 
     public UserInfo getUserInfo(){
-        return SharedPreferenceUtil.getSharedPreObject(getApplicationContext(),"userInfo",UserInfo.class);
+        UserInfo userInfo = SharedPreferenceUtil.getSharedPreObject(getApplicationContext(),"userInfo",UserInfo.class);
+        if(StringUtils.isEmpty(userInfo.getRsid())){
+            userInfo.setRsid(SharedPreferenceUtil.getSharedPreString(getApplicationContext(),"rsid"));
+        }
+        return userInfo;
     }
 
     // 获取DB

@@ -7,18 +7,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hw.common.faultdetect.api.UserServiceApi;
+import com.hw.common.faultdetect.model.BaseAjaxCallBack;
+import com.hw.common.faultdetect.model.Req_Regist;
+import com.hw.common.faultdetect.model.Res_UserInfo;
+import com.hw.common.faultdetect.model.UserInfo;
 import com.hw.common.ui.dialog.DialogUtil;
 import com.hw.common.utils.basicUtils.CheckUtils;
 import com.hw.common.utils.basicUtils.StringUtils;
 import com.hw.common.utils.basicUtils.SystemUtils;
-import com.hw.common.web.FastHttp;
 
-import info.faultdetect.com.faultdetect.MyApplication;
 import info.faultdetect.com.faultdetect.R;
-import info.faultdetect.com.faultdetect.bean.BaseAjaxCallBack;
-import info.faultdetect.com.faultdetect.bean.Req_Regist;
-import info.faultdetect.com.faultdetect.bean.Res_UserInfo;
-import info.faultdetect.com.faultdetect.bean.UserInfo;
 import info.faultdetect.com.faultdetect.utils.TimeCount;
 import info.faultdetect.com.faultdetect.utils.ToastUtil;
 
@@ -73,7 +72,7 @@ public class RegistActivity extends BaseActivity {
         }
 
         DialogUtil.showLoadingDialog(this);
-        FastHttp.ajaxGetByBean(MyApplication.SERVER_URL + "register/register.html", new Req_Regist(tel,pwd,code), new BaseAjaxCallBack() {
+        UserServiceApi.registApi(new Req_Regist(tel,pwd,code), new BaseAjaxCallBack() {
             public void onSuccess(Res_BaseBean t) {
                 ToastUtil.showShort("恭喜您注册成功");
                 UserInfo userInfo = t.getData(Res_UserInfo.class).getUserAccountDescriptor();
@@ -96,8 +95,9 @@ public class RegistActivity extends BaseActivity {
 
         timeCount.start();
         DialogUtil.showLoadingDialog(this, "发送中..");
-        FastHttp.ajaxGetByBean(MyApplication.SERVER_URL + "register/sendCode.html?tel="+tel, null, new BaseAjaxCallBack() {
-            public void onSuccess(Res_BaseBean t) {
+
+        UserServiceApi.sendVerCode(tel,new BaseAjaxCallBack() {
+            public void onSuccess(BaseAjaxCallBack.Res_BaseBean t) {
                 try {
                     SystemUtils.SmsContent content = new SystemUtils.SmsContent(RegistActivity.this, new Handler(), et_register_verifyCode, "云短信", new SystemUtils.onSmsListener() {
                         public void onSmsSuccess() {
@@ -122,7 +122,6 @@ public class RegistActivity extends BaseActivity {
                 timeCount.onFinish();
             }
         });
-
     }
 
     @Override

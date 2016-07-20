@@ -1,4 +1,4 @@
-package info.faultdetect.com.faultdetect.bean;
+package com.hw.common.faultdetect.model;
 
 /**
  * Created by nicai on 2016/7/18.

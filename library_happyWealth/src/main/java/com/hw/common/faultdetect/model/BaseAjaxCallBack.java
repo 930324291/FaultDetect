@@ -1,4 +1,4 @@
-package info.faultdetect.com.faultdetect.bean;
+package com.hw.common.faultdetect.model;
 
 import com.alibaba.fastjson.JSON;
 import com.hw.common.ui.dialog.DialogUtil;
